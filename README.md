@@ -2,7 +2,7 @@
 
 **Which model should our coding agent use?** is the wrong question. This repo is a small Swift library and iOS demo for the right one: *which model, at which effort, for which class of task, and what evidence would change that answer?*
 
-Article: (added after publish)
+Article: [Half the Price per Token, 40% More per Month: Your Coding Agent Needs a Model-Routing Policy](https://medium.com/@er.rajatlakhina/half-the-price-per-token-40-more-per-month-your-coding-agent-needs-a-model-routing-policy-6abe2edb4428) (Medium)
 
 ![Policy tab on the iOS Simulator](Demo/Screenshots/policy.png)
 
@@ -67,7 +67,7 @@ swift test
 
 ## Verification status
 
-- `swift build -Xswiftc -warnings-as-errors` and `swift test` (18 XCTest cases, each asserting a number used in the article) pass on Swift 6.1.2 (Linux) and in CI on `macos-15`.
+- `swift build -Xswiftc -warnings-as-errors` and `swift test` (20 XCTest cases, including ones that pin every headline number in the article) pass on Swift 6.1.2 (Linux) and in CI on `macos-15`.
 - The Simulator screenshots above are taken by `.github/workflows/ci.yml`: it builds `Demo.xcodeproj` with `xcodebuild`, installs the app on an iPhone Simulator, launches it once per tab with launch arguments, checks the process is still alive after 8 seconds, and commits the PNGs. That is a real build and launch, but nobody tapped the UI by hand.
 
 ## Sources
