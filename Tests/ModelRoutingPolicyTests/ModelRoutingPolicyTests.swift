@@ -85,6 +85,26 @@ final class ModelRoutingPolicyTests: XCTestCase {
         XCTAssertNil(Sensitivity.breakEvenEscalationCost(p, p, mix: mix))
     }
 
+    func testArchitectureTaskExpectedCostOnEachModelAlone() throws {
+        let sonnet = try XCTUnwrap(Economics.price(Route(primary: SampleTeam.sonnet55Medium), for: .architecturePlanning,
+                                                   in: after, assumptions: Assumptions()))
+        let opus = try XCTUnwrap(Economics.price(Route(primary: SampleTeam.opusHigh), for: .architecturePlanning,
+                                                 in: after, assumptions: Assumptions()))
+        XCTAssertEqual(sonnet.expectedCostPerTask, 27.52, accuracy: 1e-9)
+        XCTAssertEqual(opus.expectedCostPerTask, 10.16, accuracy: 1e-9)
+    }
+
+    func testAllSonnetIsFortyPercentMoreExpensiveAndHighEffortDoesNotRescueIt() {
+        let allOpus = PolicyBuilder.uniform(SampleTeam.opusHigh, suite: after).monthlyCost(mix: mix)
+        let allSonnetMedium = PolicyBuilder.uniform(SampleTeam.sonnet55Medium, suite: after).monthlyCost(mix: mix)
+        let allSonnetHigh = PolicyBuilder.uniform(SampleTeam.sonnet55High, suite: after).monthlyCost(mix: mix)
+        XCTAssertEqual(allSonnetMedium / allOpus, 1.40, accuracy: 0.005)
+        XCTAssertEqual(allSonnetHigh, 6_200.8, accuracy: 1e-6)
+        XCTAssertGreaterThan(allSonnetHigh, allOpus)
+        // The 44 extra escalations at $60 each.
+        XCTAssertEqual((131.0 - 87.0) * Assumptions().humanEscalationCost, 2_640, accuracy: 1e-9)
+    }
+
     // MARK: - Derived policy
 
     func testDerivedPolicyKeepsJudgmentWorkOnOpus() throws {
